@@ -25,10 +25,22 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 
 export default withTRPC<AppRouter>({
   config({ ctx }) {
+    if (typeof window !== "undefined") {
+      // during client requests
+      return {
+        url: "/api/trpc",
+      };
+    }
+    // during SSR below
+
     const url = `${getBaseUrl()}/api/trpc`;
 
     return {
       url,
+      headers: {
+        "x-ssr": "1",
+      },
     };
   },
+  ssr: true,
 })(MyApp);
