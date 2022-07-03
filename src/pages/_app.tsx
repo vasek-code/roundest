@@ -16,9 +16,16 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   );
 };
 
+function getBaseUrl() {
+  if (process.browser) return "";
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+
+  return `http://localhost:${process.env.PORT ?? 3000}`;
+}
+
 export default withTRPC<AppRouter>({
   config({ ctx }) {
-    const url = `https://roundest-ten.vercel.app/api/trpc`;
+    const url = `${getBaseUrl()}/api/trpc`;
 
     return {
       url,
