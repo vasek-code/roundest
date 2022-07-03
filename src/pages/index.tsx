@@ -2,6 +2,7 @@ import { Button, Flex, Text } from "@chakra-ui/react";
 import { NextPage } from "next/types";
 import { trpc } from "../utils/trpc";
 import NextImage from "next/image";
+import { prisma } from "../../prisma/prisma";
 
 const Home: NextPage = () => {
   const {
@@ -15,9 +16,17 @@ const Home: NextPage = () => {
     refetchOnMount: false,
   });
 
+  const voteMutation = trpc.useMutation(["make-vote"]);
+
+  console.log(pokemonPair?.secondPokemon.spriteURL);
+
   const utils = trpc.useContext();
 
-  function voteForPokemon() {
+  function voteForPokemon(votedFor: number) {
+    voteMutation.mutateAsync({
+      votedFor: votedFor,
+    });
+
     utils.invalidateQueries("get-pokemon-pair");
   }
 
@@ -42,7 +51,9 @@ const Home: NextPage = () => {
                 height="200px"
                 p="0px"
                 disabled={isLoading}
-                onClick={voteForPokemon}
+                onClick={() => {
+                  voteForPokemon(pokemonPair.firstPokemon.dexId);
+                }}
               >
                 <NextImage
                   src={pokemonPair.firstPokemon.spriteURL as string}
@@ -58,7 +69,9 @@ const Home: NextPage = () => {
                 width="200px"
                 height="200px"
                 p="0px"
-                onClick={voteForPokemon}
+                onClick={() => {
+                  voteForPokemon(pokemonPair.secondPokemon.dexId);
+                }}
                 disabled={isLoading}
               >
                 <NextImage

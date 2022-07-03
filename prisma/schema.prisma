@@ -1,0 +1,27 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_URL")
+  referentialIntegrity = "prisma"
+}
+
+model Vote {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  pokemon      Pokemon @relation(fields: [pokemonDexId], references: [dexId])
+  pokemonDexId Int
+}
+
+model Pokemon {
+  id        String @id @default(cuid())
+  dexId     Int    @unique
+  Vote      Vote[]
+  name      String
+  spriteURL String
+}
