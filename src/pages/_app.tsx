@@ -5,6 +5,13 @@ import { AppType } from "next/dist/shared/lib/utils";
 import { AppRouter } from "./api/trpc/[trpc]";
 import { ReactQueryDevtools } from "react-query/devtools";
 
+function getBaseUrl() {
+  if (process.browser) return "";
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+
+  return `http://localhost:${process.env.PORT ?? 3000}`;
+}
+
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <ChakraProvider theme={theme}>
@@ -15,13 +22,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     </ChakraProvider>
   );
 };
-
-function getBaseUrl() {
-  if (process.browser) return "";
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-
-  return `http://localhost:${process.env.PORT ?? 3000}`;
-}
 
 export default withTRPC<AppRouter>({
   config({ ctx }) {
