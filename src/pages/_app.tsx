@@ -18,7 +18,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 
 export default withTRPC<AppRouter>({
   config({ ctx }) {
-    const url = `https://${process.env.VERCEL_URL}/api/trpc`;
+    const url = `https://roundest-ten.vercel.app/api/trpc`;
+
     return {
       url,
     };
