@@ -52,7 +52,7 @@ export const appRouter = trpc.router()
           pokemonDexId: input.votedFor
         }
       })
-      return { success: true, vote: voteInDb };
+      return { success: true, vote: voteInDb }
     }
   })
 
